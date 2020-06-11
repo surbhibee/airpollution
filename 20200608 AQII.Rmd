@@ -53,13 +53,14 @@ delhi <- rbind(delhi_2020, delhi_2019q2, delhi_2019q1, delhi_2018, delhi_2017)
 ```{r}
 delhi$year <- substr(delhi$Date, 1,4)
 delhi$day_month <- substr(delhi$Date, 6,10)
+delhi <- delhi %>% filter(day_month != "12-31" & day_month != "12-30")
 ```
 
 # PM10
 ```{r}
 dat <- delhi %>% filter(Specie == "pm10" & Date >= "2017-01-01") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
 dat$day_month <- as.Date(dat$day_month, "%m-%d")
-dat <- dat %>% arrange(day_month)
+dat <- dat[rev(order(dat$day_month)),]
 write_csv(dat, "pm10.csv")
 ```
 
@@ -67,7 +68,7 @@ write_csv(dat, "pm10.csv")
 ```{r}
 dat <- delhi %>% filter(Specie == "pm25" & Date >= "2017-01-01" & City == "Delhi") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
 dat$day_month <- as.Date(dat$day_month, "%m-%d")
-dat <- dat %>% select(day_month, y2020, y2019, y2018, y2017) %>% arrange(day_month)
+dat <- dat[rev(order(dat$day_month)),]
 write_csv(dat, "pm25.csv")
 ```
 
@@ -75,7 +76,7 @@ write_csv(dat, "pm25.csv")
 ```{r}
 dat <- delhi %>% filter(Specie == "co" & Date >= "2017-01-01") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
 dat$day_month <- as.Date(dat$day_month, "%m-%d")
-dat <- dat %>% select(day_month, y2020, y2019, y2018, y2017) %>% arrange(day_month)
+dat <- dat[rev(order(dat$day_month)),]
 write_csv(dat, "CO.csv")
 ```
 
@@ -83,7 +84,7 @@ write_csv(dat, "CO.csv")
 ```{r}
 dat <- delhi %>% filter(Specie == "no2" & Date >= "2017-01-01") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
 dat$day_month <- as.Date(dat$day_month, "%m-%d")
-dat <- dat %>% select(day_month, y2020, y2019, y2018, y2017) %>% arrange(day_month)
+dat <- dat[rev(order(dat$day_month)),]
 write_csv(dat, "NO2.csv")
 ```
 
@@ -92,7 +93,7 @@ write_csv(dat, "NO2.csv")
 ```{r}
 dat <- delhi %>% filter(Specie == "so2" & Date >= "2017-01-01") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
 dat$day_month <- as.Date(dat$day_month, "%m-%d")
-dat <- dat %>% select(day_month, y2020, y2019, y2018, y2017) %>% arrange(day_month)
+dat <- dat[rev(order(dat$day_month)),]
 write_csv(dat, "SO2.csv")
 ```
 
@@ -100,7 +101,7 @@ write_csv(dat, "SO2.csv")
 ```{r}
 dat <- delhi %>% filter(Specie == "o3" & Date >= "2017-01-01") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
 dat$day_month <- as.Date(dat$day_month, "%m-%d")
-dat <- dat %>% select(day_month, y2020, y2019, y2018, y2017) %>% arrange(day_month)
+dat <- dat[rev(order(dat$day_month)),]
 write_csv(dat, "O3.csv")
 ```
 
