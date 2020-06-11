@@ -1,0 +1,106 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list = ls())
+library(readxl)
+library(tidyverse)
+library(ggrepel)
+library(forecast)
+setwd("~/Documents/GitHub/airpollution")
+```
+
+# Importing data
+```{r}
+y2020 <- read_csv("https://aqicn.org/data-platform/covid19/report/15044-84747aaf/2020/waqi-covid-2020.csv", skip = 4)
+y2019q1 <- read_csv("waqi-covid19-airqualitydata-2019Q1.csv", skip = 4)
+y2019q2 <- read_csv("waqi-covid19-airqualitydata-2019Q2.csv", skip = 4)
+y2018 <- read_csv("waqi-covid19-airqualitydata-2018H1.csv", skip = 4)
+y2017 <- read_csv("waqi-covid19-airqualitydata-2017H1.csv", skip = 4)
+```
+
+
+```{r}
+india <- y2020 %>% filter(Country == "IN")
+cities <- india %>% group_by(City) %>% summarise(n = n())
+```
+
+```{r}
+delhi_2020 <- y2020 %>% filter(City == "New Delhi" | City == "Delhi")
+delhi_2019q1 <- y2019q1 %>% filter(City == "New Delhi" | City == "Delhi")
+delhi_2019q2 <- y2019q2 %>% filter(City == "New Delhi" | City == "Delhi")
+delhi_2018 <- y2018 %>% filter(City == "New Delhi" | City == "Delhi")
+delhi_2017 <- y2017 %>% filter(City == "New Delhi" | City == "Delhi")
+```
+
+```{r}
+remove(y2020, y2019q1, y2019q2, y2018, y2017)
+```
+
+```{r}
+delhi <- rbind(delhi_2020, delhi_2019q2, delhi_2019q1, delhi_2018, delhi_2017)
+```
+
+
+# Plotting PM 10 year on year
+```{r}
+delhi$year <- substr(delhi$Date, 1,4)
+delhi$day_month <- substr(delhi$Date, 6,10)
+```
+
+# PM10
+```{r}
+dat <- delhi %>% filter(Specie == "pm10" & Date >= "2017-01-01") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
+dat$day_month <- as.Date(dat$day_month, "%m-%d")
+dat <- dat %>% arrange(day_month)
+write_csv(dat, "pm10.csv")
+```
+
+# PM2.5
+```{r}
+dat <- delhi %>% filter(Specie == "pm25" & Date >= "2017-01-01" & City == "Delhi") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
+dat$day_month <- as.Date(dat$day_month, "%m-%d")
+dat <- dat %>% select(day_month, y2020, y2019, y2018, y2017) %>% arrange(day_month)
+write_csv(dat, "pm25.csv")
+```
+
+# CO
+```{r}
+dat <- delhi %>% filter(Specie == "co" & Date >= "2017-01-01") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
+dat$day_month <- as.Date(dat$day_month, "%m-%d")
+dat <- dat %>% select(day_month, y2020, y2019, y2018, y2017) %>% arrange(day_month)
+write_csv(dat, "CO.csv")
+```
+
+# NO2
+```{r}
+dat <- delhi %>% filter(Specie == "no2" & Date >= "2017-01-01") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
+dat$day_month <- as.Date(dat$day_month, "%m-%d")
+dat <- dat %>% select(day_month, y2020, y2019, y2018, y2017) %>% arrange(day_month)
+write_csv(dat, "NO2.csv")
+```
+
+
+# SO2
+```{r}
+dat <- delhi %>% filter(Specie == "so2" & Date >= "2017-01-01") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
+dat$day_month <- as.Date(dat$day_month, "%m-%d")
+dat <- dat %>% select(day_month, y2020, y2019, y2018, y2017) %>% arrange(day_month)
+write_csv(dat, "SO2.csv")
+```
+
+# O3
+```{r}
+dat <- delhi %>% filter(Specie == "o3" & Date >= "2017-01-01") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
+dat$day_month <- as.Date(dat$day_month, "%m-%d")
+dat <- dat %>% select(day_month, y2020, y2019, y2018, y2017) %>% arrange(day_month)
+write_csv(dat, "O3.csv")
+```
+
