@@ -69,7 +69,7 @@ write_csv(dat, "Delhi/pm10.csv")
 dat <- delhi %>% filter(Specie == "pm25" & Date >= "2017-01-01" & City == "Delhi") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
 dat$day_month <- as.Date(dat$day_month, "%m-%d")
 dat <- dat[rev(order(dat$day_month)),]
-write_csv(dat, "pm25.csv")
+write_csv(dat, "Delhi/pm25.csv")
 ```
 
 # CO
@@ -77,7 +77,7 @@ write_csv(dat, "pm25.csv")
 dat <- delhi %>% filter(Specie == "co" & Date >= "2017-01-01") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
 dat$day_month <- as.Date(dat$day_month, "%m-%d")
 dat <- dat[rev(order(dat$day_month)),]
-write_csv(dat, "CO.csv")
+write_csv(dat, "Delhi/CO.csv")
 ```
 
 # NO2
@@ -85,7 +85,7 @@ write_csv(dat, "CO.csv")
 dat <- delhi %>% filter(Specie == "no2" & Date >= "2017-01-01") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
 dat$day_month <- as.Date(dat$day_month, "%m-%d")
 dat <- dat[rev(order(dat$day_month)),]
-write_csv(dat, "NO2.csv")
+write_csv(dat, "Delhi/NO2.csv")
 ```
 
 
@@ -94,7 +94,7 @@ write_csv(dat, "NO2.csv")
 dat <- delhi %>% filter(Specie == "so2" & Date >= "2017-01-01") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
 dat$day_month <- as.Date(dat$day_month, "%m-%d")
 dat <- dat[rev(order(dat$day_month)),]
-write_csv(dat, "SO2.csv")
+write_csv(dat, "Delhi/SO2.csv")
 ```
 
 # O3
@@ -102,6 +102,6 @@ write_csv(dat, "SO2.csv")
 dat <- delhi %>% filter(Specie == "o3" & Date >= "2017-01-01") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
 dat$day_month <- as.Date(dat$day_month, "%m-%d")
 dat <- dat[rev(order(dat$day_month)),]
-write_csv(dat, "O3.csv")
+write_csv(dat, "Delhi/O3.csv")
 ```
 
