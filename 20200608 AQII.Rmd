@@ -61,7 +61,7 @@ delhi <- delhi %>% filter(day_month != "12-31" & day_month != "12-30")
 dat <- delhi %>% filter(Specie == "pm10" & Date >= "2017-01-01") %>% select(year, day_month, median) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "y", values_from = "median") 
 dat$day_month <- as.Date(dat$day_month, "%m-%d")
 dat <- dat[rev(order(dat$day_month)),]
-write_csv(dat, "pm10.csv")
+write_csv(dat, "Delhi/pm10.csv")
 ```
 
 # PM2.5
