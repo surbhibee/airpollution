@@ -1753,14 +1753,40 @@ summary {
 <p>Try executing this chunk by clicking the <em>Run</em> button within the chunk or by placing your cursor inside it and pressing <em>Cmd+Shift+Enter</em>.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxua25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKVxucm0obGlzdCA9IGxzKCkpXG5saWJyYXJ5KHJlYWR4bClcbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnZ3JlcGVsKVxubGlicmFyeShmb3JlY2FzdClcbnNldHdkKFwifi9Eb2N1bWVudHMvR2l0SHViL2FpcnBvbGx1dGlvblwiKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxua25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKVxucm0obGlzdCA9IGxzKCkpXG5saWJyYXJ5KHJlYWR4bClcbmxpYnJhcnkodGlkeXZlcnNlKVxuYGBgIn0= -->
 <pre class="r"><code>knitr::opts_chunk$set(echo = TRUE)
 rm(list = ls())
 library(readxl)
-library(tidyverse)
-library(ggrepel)
-library(forecast)
-setwd(&quot;~/Documents/GitHub/airpollution&quot;)</code></pre>
+library(tidyverse)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUmVnaXN0ZXJlZCBTMyBtZXRob2Qgb3ZlcndyaXR0ZW4gYnkgJ2RwbHlyJzpcbiAgbWV0aG9kICAgICAgICAgICBmcm9tXG4gIHByaW50LnJvd3dpc2VfZGYgICAgIFxuUmVnaXN0ZXJlZCBTMyBtZXRob2RzIG92ZXJ3cml0dGVuIGJ5ICdkYnBseXInOlxuICBtZXRob2QgICAgICAgICBmcm9tXG4gIHByaW50LnRibF9sYXp5ICAgICBcbiAgcHJpbnQudGJsX3NxbCAgICAgIFxuXHUwMDFiWzMwbeKUgOKUgCBcdTAwMWJbMW1BdHRhY2hpbmcgcGFja2FnZXNcdTAwMWJbMjJtIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCB0aWR5dmVyc2UgMS4zLjAg4pSA4pSAXHUwMDFiWzM5bVxuXHUwMDFiWzMwbVx1MDAxYlszMm3inJNcdTAwMWJbMzBtIFx1MDAxYlszNG1nZ3Bsb3QyXHUwMDFiWzMwbSAzLjMuMCAgICAgXHUwMDFiWzMybeKck1x1MDAxYlszMG0gXHUwMDFiWzM0bXB1cnJyICBcdTAwMWJbMzBtIDAuMy4zXG5cdTAwMWJbMzJt4pyTXHUwMDFiWzMwbSBcdTAwMWJbMzRtdGliYmxlIFx1MDAxYlszMG0gMy4wLjAgICAgIFx1MDAxYlszMm3inJNcdTAwMWJbMzBtIFx1MDAxYlszNG1kcGx5ciAgXHUwMDFiWzMwbSAwLjguNVxuXHUwMDFiWzMybeKck1x1MDAxYlszMG0gXHUwMDFiWzM0bXRpZHlyICBcdTAwMWJbMzBtIDEuMC4yICAgICBcdTAwMWJbMzJt4pyTXHUwMDFiWzMwbSBcdTAwMWJbMzRtc3RyaW5nclx1MDAxYlszMG0gMS40LjBcblx1MDAxYlszMm3inJNcdTAwMWJbMzBtIFx1MDAxYlszNG1yZWFkciAgXHUwMDFiWzMwbSAxLjMuMSAgICAgXHUwMDFiWzMybeKck1x1MDAxYlszMG0gXHUwMDFiWzM0bWZvcmNhdHNcdTAwMWJbMzBtIDAuNS4wXHUwMDFiWzM5bVxuXHUwMDFiWzMwbeKUgOKUgCBcdTAwMWJbMW1Db25mbGljdHNcdTAwMWJbMjJtIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCB0aWR5dmVyc2VfY29uZmxpY3RzKCkg4pSA4pSAXG5cdTAwMWJbMzFteFx1MDAxYlszMG0gXHUwMDFiWzM0bWRwbHlyXHUwMDFiWzMwbTo6XHUwMDFiWzMybWZpbHRlcigpXHUwMDFiWzMwbSBtYXNrcyBcdTAwMWJbMzRtc3RhdHNcdTAwMWJbMzBtOjpmaWx0ZXIoKVxuXHUwMDFiWzMxbXhcdTAwMWJbMzBtIFx1MDAxYlszNG1kcGx5clx1MDAxYlszMG06Olx1MDAxYlszMm1sYWcoKVx1MDAxYlszMG0gICAgbWFza3MgXHUwMDFiWzM0bXN0YXRzXHUwMDFiWzMwbTo6bGFnKClcdTAwMWJbMzltXG4ifQ== -->
+<pre><code>Registered S3 method overwritten by 'dplyr':
+  method           from
+  print.rowwise_df     
+Registered S3 methods overwritten by 'dbplyr':
+  method         from
+  print.tbl_lazy     
+  print.tbl_sql      
+[30m── [1mAttaching packages[22m ────────────────────────────────────────────────── tidyverse 1.3.0 ──[39m
+[30m[32m✓[30m [34mggplot2[30m 3.3.0     [32m✓[30m [34mpurrr  [30m 0.3.3
+[32m✓[30m [34mtibble [30m 3.0.0     [32m✓[30m [34mdplyr  [30m 0.8.5
+[32m✓[30m [34mtidyr  [30m 1.0.2     [32m✓[30m [34mstringr[30m 1.4.0
+[32m✓[30m [34mreadr  [30m 1.3.1     [32m✓[30m [34mforcats[30m 0.5.0[39m
+[30m── [1mConflicts[22m ───────────────────────────────────────────────────── tidyverse_conflicts() ──
+[31mx[30m [34mdplyr[30m::[32mfilter()[30m masks [34mstats[30m::filter()
+[31mx[30m [34mdplyr[30m::[32mlag()[30m    masks [34mstats[30m::lag()[39m</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShnZ3JlcGVsKVxubGlicmFyeShmb3JlY2FzdClcbmBgYCJ9 -->
+<pre class="r"><code>library(ggrepel)
+library(forecast)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUmVnaXN0ZXJlZCBTMyBtZXRob2Qgb3ZlcndyaXR0ZW4gYnkgJ3F1YW50bW9kJzpcbiAgbWV0aG9kICAgICAgICAgICAgZnJvbVxuICBhcy56b28uZGF0YS5mcmFtZSB6b28gXG4ifQ== -->
+<pre><code>Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0d2QoXCJ+L0RvY3VtZW50cy9HaXRIdWIvYWlycG9sbHV0aW9uXCIpXG5gYGAifQ== -->
+<pre class="r"><code>setwd(&quot;~/Documents/GitHub/airpollution&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1771,22 +1797,121 @@ setwd(&quot;~/Documents/GitHub/airpollution&quot;)</code></pre>
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueTIwMjAgPC0gcmVhZF9jc3YoXCJodHRwczovL2FxaWNuLm9yZy9kYXRhLXBsYXRmb3JtL2NvdmlkMTkvcmVwb3J0LzE1MDQ0LTg0NzQ3YWFmLzIwMjAvd2FxaS1jb3ZpZC0yMDIwLmNzdlwiLCBza2lwID0gNClcbmBgYCJ9 -->
 <pre class="r"><code>y2020 &lt;- read_csv(&quot;https://aqicn.org/data-platform/covid19/report/15044-84747aaf/2020/waqi-covid-2020.csv&quot;, skip = 4)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUGFyc2VkIHdpdGggY29sdW1uIHNwZWNpZmljYXRpb246XG5jb2xzKFxuICBEYXRlID0gXHUwMDFiWzM0bWNvbF9kYXRlKGZvcm1hdCA9IFwiXCIpXHUwMDFiWzM5bSxcbiAgQ291bnRyeSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBDaXR5ID0gXHUwMDFiWzMxbWNvbF9jaGFyYWN0ZXIoKVx1MDAxYlszOW0sXG4gIFNwZWNpZSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBjb3VudCA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBtaW4gPSBcdTAwMWJbMzJtY29sX2RvdWJsZSgpXHUwMDFiWzM5bSxcbiAgbWF4ID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIG1lZGlhbiA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICB2YXJpYW5jZSA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltXG4pXG4ifQ== -->
+<pre><code>Parsed with column specification:
+cols(
+  Date = [34mcol_date(format = &quot;&quot;)[39m,
+  Country = [31mcol_character()[39m,
+  City = [31mcol_character()[39m,
+  Specie = [31mcol_character()[39m,
+  count = [32mcol_double()[39m,
+  min = [32mcol_double()[39m,
+  max = [32mcol_double()[39m,
+  median = [32mcol_double()[39m,
+  variance = [32mcol_double()[39m
+)</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueTIwMTlxMSA8LSByZWFkX2NzdihcIndhcWktY292aWQxOS1haXJxdWFsaXR5ZGF0YS0yMDE5UTEuY3N2XCIsIHNraXAgPSA0KVxuYGBgIn0= -->
+<pre class="r"><code>y2019q1 &lt;- read_csv(&quot;waqi-covid19-airqualitydata-2019Q1.csv&quot;, skip = 4)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUGFyc2VkIHdpdGggY29sdW1uIHNwZWNpZmljYXRpb246XG5jb2xzKFxuICBEYXRlID0gXHUwMDFiWzM0bWNvbF9kYXRlKGZvcm1hdCA9IFwiXCIpXHUwMDFiWzM5bSxcbiAgQ291bnRyeSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBDaXR5ID0gXHUwMDFiWzMxbWNvbF9jaGFyYWN0ZXIoKVx1MDAxYlszOW0sXG4gIFNwZWNpZSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBjb3VudCA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBtaW4gPSBcdTAwMWJbMzJtY29sX2RvdWJsZSgpXHUwMDFiWzM5bSxcbiAgbWF4ID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIG1lZGlhbiA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICB2YXJpYW5jZSA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltXG4pXG4ifQ== -->
+<pre><code>Parsed with column specification:
+cols(
+  Date = [34mcol_date(format = &quot;&quot;)[39m,
+  Country = [31mcol_character()[39m,
+  City = [31mcol_character()[39m,
+  Specie = [31mcol_character()[39m,
+  count = [32mcol_double()[39m,
+  min = [32mcol_double()[39m,
+  max = [32mcol_double()[39m,
+  median = [32mcol_double()[39m,
+  variance = [32mcol_double()[39m
+)</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueTIwMTlxMiA8LSByZWFkX2NzdihcIndhcWktY292aWQxOS1haXJxdWFsaXR5ZGF0YS0yMDE5UTIuY3N2XCIsIHNraXAgPSA0KVxuYGBgIn0= -->
+<pre class="r"><code>y2019q2 &lt;- read_csv(&quot;waqi-covid19-airqualitydata-2019Q2.csv&quot;, skip = 4)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUGFyc2VkIHdpdGggY29sdW1uIHNwZWNpZmljYXRpb246XG5jb2xzKFxuICBEYXRlID0gXHUwMDFiWzM0bWNvbF9kYXRlKGZvcm1hdCA9IFwiXCIpXHUwMDFiWzM5bSxcbiAgQ291bnRyeSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBDaXR5ID0gXHUwMDFiWzMxbWNvbF9jaGFyYWN0ZXIoKVx1MDAxYlszOW0sXG4gIFNwZWNpZSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBjb3VudCA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBtaW4gPSBcdTAwMWJbMzJtY29sX2RvdWJsZSgpXHUwMDFiWzM5bSxcbiAgbWF4ID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIG1lZGlhbiA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICB2YXJpYW5jZSA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltXG4pXG4ifQ== -->
+<pre><code>Parsed with column specification:
+cols(
+  Date = [34mcol_date(format = &quot;&quot;)[39m,
+  Country = [31mcol_character()[39m,
+  City = [31mcol_character()[39m,
+  Specie = [31mcol_character()[39m,
+  count = [32mcol_double()[39m,
+  min = [32mcol_double()[39m,
+  max = [32mcol_double()[39m,
+  median = [32mcol_double()[39m,
+  variance = [32mcol_double()[39m
+)</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueTIwMTggPC0gcmVhZF9jc3YoXCJ3YXFpLWNvdmlkMTktYWlycXVhbGl0eWRhdGEtMjAxOEgxLmNzdlwiLCBza2lwID0gNClcbmBgYCJ9 -->
+<pre class="r"><code>y2018 &lt;- read_csv(&quot;waqi-covid19-airqualitydata-2018H1.csv&quot;, skip = 4)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUGFyc2VkIHdpdGggY29sdW1uIHNwZWNpZmljYXRpb246XG5jb2xzKFxuICBEYXRlID0gXHUwMDFiWzM0bWNvbF9kYXRlKGZvcm1hdCA9IFwiXCIpXHUwMDFiWzM5bSxcbiAgQ291bnRyeSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBDaXR5ID0gXHUwMDFiWzMxbWNvbF9jaGFyYWN0ZXIoKVx1MDAxYlszOW0sXG4gIFNwZWNpZSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBjb3VudCA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBtaW4gPSBcdTAwMWJbMzJtY29sX2RvdWJsZSgpXHUwMDFiWzM5bSxcbiAgbWF4ID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIG1lZGlhbiA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICB2YXJpYW5jZSA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltXG4pXG4ifQ== -->
+<pre><code>Parsed with column specification:
+cols(
+  Date = [34mcol_date(format = &quot;&quot;)[39m,
+  Country = [31mcol_character()[39m,
+  City = [31mcol_character()[39m,
+  Specie = [31mcol_character()[39m,
+  count = [32mcol_double()[39m,
+  min = [32mcol_double()[39m,
+  max = [32mcol_double()[39m,
+  median = [32mcol_double()[39m,
+  variance = [32mcol_double()[39m
+)</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueTIwMTcgPC0gcmVhZF9jc3YoXCJ3YXFpLWNvdmlkMTktYWlycXVhbGl0eWRhdGEtMjAxN0gxLmNzdlwiLCBza2lwID0gNClcbmBgYCJ9 -->
+<pre class="r"><code>y2017 &lt;- read_csv(&quot;waqi-covid19-airqualitydata-2017H1.csv&quot;, skip = 4)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUGFyc2VkIHdpdGggY29sdW1uIHNwZWNpZmljYXRpb246XG5jb2xzKFxuICBEYXRlID0gXHUwMDFiWzM0bWNvbF9kYXRlKGZvcm1hdCA9IFwiXCIpXHUwMDFiWzM5bSxcbiAgQ291bnRyeSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBDaXR5ID0gXHUwMDFiWzMxbWNvbF9jaGFyYWN0ZXIoKVx1MDAxYlszOW0sXG4gIFNwZWNpZSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBjb3VudCA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICBtaW4gPSBcdTAwMWJbMzJtY29sX2RvdWJsZSgpXHUwMDFiWzM5bSxcbiAgbWF4ID0gXHUwMDFiWzMybWNvbF9kb3VibGUoKVx1MDAxYlszOW0sXG4gIG1lZGlhbiA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltLFxuICB2YXJpYW5jZSA9IFx1MDAxYlszMm1jb2xfZG91YmxlKClcdTAwMWJbMzltXG4pXG4ifQ== -->
+<pre><code>Parsed with column specification:
+cols(
+  Date = [34mcol_date(format = &quot;&quot;)[39m,
+  Country = [31mcol_character()[39m,
+  City = [31mcol_character()[39m,
+  Specie = [31mcol_character()[39m,
+  count = [32mcol_double()[39m,
+  min = [32mcol_double()[39m,
+  max = [32mcol_double()[39m,
+  median = [32mcol_double()[39m,
+  variance = [32mcol_double()[39m
+)</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5kaWEgPC0geTIwMjAgJT4lIGZpbHRlcihDb3VudHJ5ID09IFwiSU5cIilcbmNpdGllcyA8LSBpbmRpYSAlPiUgZ3JvdXBfYnkoQ2l0eSkgJT4lIHN1bW1hcmlzZShuID0gbigpKVxuYGBgIn0= -->
+<pre class="r"><code>india &lt;- y2020 %&gt;% filter(Country == &quot;IN&quot;)
+cities &lt;- india %&gt;% group_by(City) %&gt;% summarise(n = n())</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGVsaGlfMjAyMCA8LSB5MjAyMCAlPiUgZmlsdGVyKENpdHkgPT0gXCJOZXcgRGVsaGlcIiB8IENpdHkgPT0gXCJEZWxoaVwiKVxuZGVsaGlfMjAxOXExIDwtIHkyMDE5cTEgJT4lIGZpbHRlcihDaXR5ID09IFwiTmV3IERlbGhpXCIgfCBDaXR5ID09IFwiRGVsaGlcIilcbmRlbGhpXzIwMTlxMiA8LSB5MjAxOXEyICU+JSBmaWx0ZXIoQ2l0eSA9PSBcIk5ldyBEZWxoaVwiIHwgQ2l0eSA9PSBcIkRlbGhpXCIpXG5kZWxoaV8yMDE4IDwtIHkyMDE4ICU+JSBmaWx0ZXIoQ2l0eSA9PSBcIk5ldyBEZWxoaVwiIHwgQ2l0eSA9PSBcIkRlbGhpXCIpXG5kZWxoaV8yMDE3IDwtIHkyMDE3ICU+JSBmaWx0ZXIoQ2l0eSA9PSBcIk5ldyBEZWxoaVwiIHwgQ2l0eSA9PSBcIkRlbGhpXCIpXG5gYGAifQ== -->
+<pre class="r"><code>delhi_2020 &lt;- y2020 %&gt;% filter(City == &quot;New Delhi&quot; | City == &quot;Delhi&quot;)
+delhi_2019q1 &lt;- y2019q1 %&gt;% filter(City == &quot;New Delhi&quot; | City == &quot;Delhi&quot;)
+delhi_2019q2 &lt;- y2019q2 %&gt;% filter(City == &quot;New Delhi&quot; | City == &quot;Delhi&quot;)
+delhi_2018 &lt;- y2018 %&gt;% filter(City == &quot;New Delhi&quot; | City == &quot;Delhi&quot;)
+delhi_2017 &lt;- y2017 %&gt;% filter(City == &quot;New Delhi&quot; | City == &quot;Delhi&quot;)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucmVtb3ZlKHkyMDIwLCB5MjAxOXExLCB5MjAxOXEyLCB5MjAxOCwgeTIwMTcpXG5gYGAifQ== -->
+<pre class="r"><code>remove(y2020, y2019q1, y2019q2, y2018, y2017)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGVsaGkgPC0gcmJpbmQoZGVsaGlfMjAyMCwgZGVsaGlfMjAxOXEyLCBkZWxoaV8yMDE5cTEsIGRlbGhpXzIwMTgsIGRlbGhpXzIwMTcpXG5gYGAifQ== -->
+<pre class="r"><code>delhi &lt;- rbind(delhi_2020, delhi_2019q2, delhi_2019q1, delhi_2018, delhi_2017)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1794,6 +1919,11 @@ setwd(&quot;~/Documents/GitHub/airpollution&quot;)</code></pre>
 <h1>Plotting PM 10 year on year</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGVsaGkkeWVhciA8LSBzdWJzdHIoZGVsaGkkRGF0ZSwgMSw0KVxuZGVsaGkkZGF5X21vbnRoIDwtIHN1YnN0cihkZWxoaSREYXRlLCA2LDEwKVxuZGVsaGkgPC0gZGVsaGkgJT4lIGZpbHRlcihkYXlfbW9udGggIT0gXCIxMi0zMVwiICYgZGF5X21vbnRoICE9IFwiMTItMzBcIilcbmBgYCJ9 -->
+<pre class="r"><code>delhi$year &lt;- substr(delhi$Date, 1,4)
+delhi$day_month &lt;- substr(delhi$Date, 6,10)
+delhi &lt;- delhi %&gt;% filter(day_month != &quot;12-31&quot; &amp; day_month != &quot;12-30&quot;)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1801,6 +1931,12 @@ setwd(&quot;~/Documents/GitHub/airpollution&quot;)</code></pre>
 <h1>PM10</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0IDwtIGRlbGhpICU+JSBmaWx0ZXIoU3BlY2llID09IFwicG0xMFwiICYgRGF0ZSA+PSBcIjIwMTctMDEtMDFcIikgJT4lIHNlbGVjdCh5ZWFyLCBkYXlfbW9udGgsIG1lZGlhbikgJT4lIHBpdm90X3dpZGVyKGlkX2NvbHMgPSBcImRheV9tb250aFwiLCBuYW1lc19mcm9tID0gXCJ5ZWFyXCIsIG5hbWVzX3ByZWZpeCA9IFwieVwiLCB2YWx1ZXNfZnJvbSA9IFwibWVkaWFuXCIpIFxuZGF0JGRheV9tb250aCA8LSBhcy5EYXRlKGRhdCRkYXlfbW9udGgsIFwiJW0tJWRcIilcbmRhdCA8LSBkYXRbcmV2KG9yZGVyKGRhdCRkYXlfbW9udGgpKSxdXG53cml0ZV9jc3YoZGF0LCBcIkRlbGhpL3BtMTAuY3N2XCIpXG5gYGAifQ== -->
+<pre class="r"><code>dat &lt;- delhi %&gt;% filter(Specie == &quot;pm10&quot; &amp; Date &gt;= &quot;2017-01-01&quot;) %&gt;% select(year, day_month, median) %&gt;% pivot_wider(id_cols = &quot;day_month&quot;, names_from = &quot;year&quot;, names_prefix = &quot;y&quot;, values_from = &quot;median&quot;) 
+dat$day_month &lt;- as.Date(dat$day_month, &quot;%m-%d&quot;)
+dat &lt;- dat[rev(order(dat$day_month)),]
+write_csv(dat, &quot;Delhi/pm10.csv&quot;)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1808,6 +1944,12 @@ setwd(&quot;~/Documents/GitHub/airpollution&quot;)</code></pre>
 <h1>PM2.5</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0IDwtIGRlbGhpICU+JSBmaWx0ZXIoU3BlY2llID09IFwicG0yNVwiICYgRGF0ZSA+PSBcIjIwMTctMDEtMDFcIiAmIENpdHkgPT0gXCJEZWxoaVwiKSAlPiUgc2VsZWN0KHllYXIsIGRheV9tb250aCwgbWVkaWFuKSAlPiUgcGl2b3Rfd2lkZXIoaWRfY29scyA9IFwiZGF5X21vbnRoXCIsIG5hbWVzX2Zyb20gPSBcInllYXJcIiwgbmFtZXNfcHJlZml4ID0gXCJ5XCIsIHZhbHVlc19mcm9tID0gXCJtZWRpYW5cIikgXG5kYXQkZGF5X21vbnRoIDwtIGFzLkRhdGUoZGF0JGRheV9tb250aCwgXCIlbS0lZFwiKVxuZGF0IDwtIGRhdFtyZXYob3JkZXIoZGF0JGRheV9tb250aCkpLF1cbndyaXRlX2NzdihkYXQsIFwiRGVsaGkvcG0yNS5jc3ZcIilcbmBgYCJ9 -->
+<pre class="r"><code>dat &lt;- delhi %&gt;% filter(Specie == &quot;pm25&quot; &amp; Date &gt;= &quot;2017-01-01&quot; &amp; City == &quot;Delhi&quot;) %&gt;% select(year, day_month, median) %&gt;% pivot_wider(id_cols = &quot;day_month&quot;, names_from = &quot;year&quot;, names_prefix = &quot;y&quot;, values_from = &quot;median&quot;) 
+dat$day_month &lt;- as.Date(dat$day_month, &quot;%m-%d&quot;)
+dat &lt;- dat[rev(order(dat$day_month)),]
+write_csv(dat, &quot;Delhi/pm25.csv&quot;)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1815,6 +1957,12 @@ setwd(&quot;~/Documents/GitHub/airpollution&quot;)</code></pre>
 <h1>CO</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0IDwtIGRlbGhpICU+JSBmaWx0ZXIoU3BlY2llID09IFwiY29cIiAmIERhdGUgPj0gXCIyMDE3LTAxLTAxXCIpICU+JSBzZWxlY3QoeWVhciwgZGF5X21vbnRoLCBtZWRpYW4pICU+JSBwaXZvdF93aWRlcihpZF9jb2xzID0gXCJkYXlfbW9udGhcIiwgbmFtZXNfZnJvbSA9IFwieWVhclwiLCBuYW1lc19wcmVmaXggPSBcInlcIiwgdmFsdWVzX2Zyb20gPSBcIm1lZGlhblwiKSBcbmRhdCRkYXlfbW9udGggPC0gYXMuRGF0ZShkYXQkZGF5X21vbnRoLCBcIiVtLSVkXCIpXG5kYXQgPC0gZGF0W3JldihvcmRlcihkYXQkZGF5X21vbnRoKSksXVxud3JpdGVfY3N2KGRhdCwgXCJEZWxoaS9DTy5jc3ZcIilcbmBgYCJ9 -->
+<pre class="r"><code>dat &lt;- delhi %&gt;% filter(Specie == &quot;co&quot; &amp; Date &gt;= &quot;2017-01-01&quot;) %&gt;% select(year, day_month, median) %&gt;% pivot_wider(id_cols = &quot;day_month&quot;, names_from = &quot;year&quot;, names_prefix = &quot;y&quot;, values_from = &quot;median&quot;) 
+dat$day_month &lt;- as.Date(dat$day_month, &quot;%m-%d&quot;)
+dat &lt;- dat[rev(order(dat$day_month)),]
+write_csv(dat, &quot;Delhi/CO.csv&quot;)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1822,6 +1970,12 @@ setwd(&quot;~/Documents/GitHub/airpollution&quot;)</code></pre>
 <h1>NO2</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0IDwtIGRlbGhpICU+JSBmaWx0ZXIoU3BlY2llID09IFwibm8yXCIgJiBEYXRlID49IFwiMjAxNy0wMS0wMVwiKSAlPiUgc2VsZWN0KHllYXIsIGRheV9tb250aCwgbWVkaWFuKSAlPiUgcGl2b3Rfd2lkZXIoaWRfY29scyA9IFwiZGF5X21vbnRoXCIsIG5hbWVzX2Zyb20gPSBcInllYXJcIiwgbmFtZXNfcHJlZml4ID0gXCJ5XCIsIHZhbHVlc19mcm9tID0gXCJtZWRpYW5cIikgXG5kYXQkZGF5X21vbnRoIDwtIGFzLkRhdGUoZGF0JGRheV9tb250aCwgXCIlbS0lZFwiKVxuZGF0IDwtIGRhdFtyZXYob3JkZXIoZGF0JGRheV9tb250aCkpLF1cbndyaXRlX2NzdihkYXQsIFwiRGVsaGkvTk8yLmNzdlwiKVxuYGBgIn0= -->
+<pre class="r"><code>dat &lt;- delhi %&gt;% filter(Specie == &quot;no2&quot; &amp; Date &gt;= &quot;2017-01-01&quot;) %&gt;% select(year, day_month, median) %&gt;% pivot_wider(id_cols = &quot;day_month&quot;, names_from = &quot;year&quot;, names_prefix = &quot;y&quot;, values_from = &quot;median&quot;) 
+dat$day_month &lt;- as.Date(dat$day_month, &quot;%m-%d&quot;)
+dat &lt;- dat[rev(order(dat$day_month)),]
+write_csv(dat, &quot;Delhi/NO2.csv&quot;)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1829,6 +1983,12 @@ setwd(&quot;~/Documents/GitHub/airpollution&quot;)</code></pre>
 <h1>SO2</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0IDwtIGRlbGhpICU+JSBmaWx0ZXIoU3BlY2llID09IFwic28yXCIgJiBEYXRlID49IFwiMjAxNy0wMS0wMVwiKSAlPiUgc2VsZWN0KHllYXIsIGRheV9tb250aCwgbWVkaWFuKSAlPiUgcGl2b3Rfd2lkZXIoaWRfY29scyA9IFwiZGF5X21vbnRoXCIsIG5hbWVzX2Zyb20gPSBcInllYXJcIiwgbmFtZXNfcHJlZml4ID0gXCJ5XCIsIHZhbHVlc19mcm9tID0gXCJtZWRpYW5cIikgXG5kYXQkZGF5X21vbnRoIDwtIGFzLkRhdGUoZGF0JGRheV9tb250aCwgXCIlbS0lZFwiKVxuZGF0IDwtIGRhdFtyZXYob3JkZXIoZGF0JGRheV9tb250aCkpLF1cbndyaXRlX2NzdihkYXQsIFwiRGVsaGkvU08yLmNzdlwiKVxuYGBgIn0= -->
+<pre class="r"><code>dat &lt;- delhi %&gt;% filter(Specie == &quot;so2&quot; &amp; Date &gt;= &quot;2017-01-01&quot;) %&gt;% select(year, day_month, median) %&gt;% pivot_wider(id_cols = &quot;day_month&quot;, names_from = &quot;year&quot;, names_prefix = &quot;y&quot;, values_from = &quot;median&quot;) 
+dat$day_month &lt;- as.Date(dat$day_month, &quot;%m-%d&quot;)
+dat &lt;- dat[rev(order(dat$day_month)),]
+write_csv(dat, &quot;Delhi/SO2.csv&quot;)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1836,12 +1996,18 @@ setwd(&quot;~/Documents/GitHub/airpollution&quot;)</code></pre>
 <h1>O3</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0IDwtIGRlbGhpICU+JSBmaWx0ZXIoU3BlY2llID09IFwibzNcIiAmIERhdGUgPj0gXCIyMDE3LTAxLTAxXCIpICU+JSBzZWxlY3QoeWVhciwgZGF5X21vbnRoLCBtZWRpYW4pICU+JSBwaXZvdF93aWRlcihpZF9jb2xzID0gXCJkYXlfbW9udGhcIiwgbmFtZXNfZnJvbSA9IFwieWVhclwiLCBuYW1lc19wcmVmaXggPSBcInlcIiwgdmFsdWVzX2Zyb20gPSBcIm1lZGlhblwiKSBcbmRhdCRkYXlfbW9udGggPC0gYXMuRGF0ZShkYXQkZGF5X21vbnRoLCBcIiVtLSVkXCIpXG5kYXQgPC0gZGF0W3JldihvcmRlcihkYXQkZGF5X21vbnRoKSksXVxud3JpdGVfY3N2KGRhdCwgXCJEZWxoaS9PMy5jc3ZcIilcbmBgYCJ9 -->
+<pre class="r"><code>dat &lt;- delhi %&gt;% filter(Specie == &quot;o3&quot; &amp; Date &gt;= &quot;2017-01-01&quot;) %&gt;% select(year, day_month, median) %&gt;% pivot_wider(id_cols = &quot;day_month&quot;, names_from = &quot;year&quot;, names_prefix = &quot;y&quot;, values_from = &quot;median&quot;) 
+dat$day_month &lt;- as.Date(dat$day_month, &quot;%m-%d&quot;)
+dat &lt;- dat[rev(order(dat$day_month)),]
+write_csv(dat, &quot;Delhi/O3.csv&quot;)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKVGhpcyBpcyBhbiBbUiBNYXJrZG93bl0oaHR0cDovL3JtYXJrZG93bi5yc3R1ZGlvLmNvbSkgTm90ZWJvb2suIFdoZW4geW91IGV4ZWN1dGUgY29kZSB3aXRoaW4gdGhlIG5vdGVib29rLCB0aGUgcmVzdWx0cyBhcHBlYXIgYmVuZWF0aCB0aGUgY29kZS4gCgpUcnkgZXhlY3V0aW5nIHRoaXMgY2h1bmsgYnkgY2xpY2tpbmcgdGhlICpSdW4qIGJ1dHRvbiB3aXRoaW4gdGhlIGNodW5rIG9yIGJ5IHBsYWNpbmcgeW91ciBjdXJzb3IgaW5zaWRlIGl0IGFuZCBwcmVzc2luZyAqQ21kK1NoaWZ0K0VudGVyKi4gCgpgYGB7cn0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQpybShsaXN0ID0gbHMoKSkKbGlicmFyeShyZWFkeGwpCmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KGdncmVwZWwpCmxpYnJhcnkoZm9yZWNhc3QpCnNldHdkKCJ+L0RvY3VtZW50cy9HaXRIdWIvYWlycG9sbHV0aW9uIikKYGBgCgojIEltcG9ydGluZyBkYXRhCmBgYHtyfQp5MjAyMCA8LSByZWFkX2NzdigiaHR0cHM6Ly9hcWljbi5vcmcvZGF0YS1wbGF0Zm9ybS9jb3ZpZDE5L3JlcG9ydC8xNTA0NC04NDc0N2FhZi8yMDIwL3dhcWktY292aWQtMjAyMC5jc3YiLCBza2lwID0gNCkKeTIwMTlxMSA8LSByZWFkX2Nzdigid2FxaS1jb3ZpZDE5LWFpcnF1YWxpdHlkYXRhLTIwMTlRMS5jc3YiLCBza2lwID0gNCkKeTIwMTlxMiA8LSByZWFkX2Nzdigid2FxaS1jb3ZpZDE5LWFpcnF1YWxpdHlkYXRhLTIwMTlRMi5jc3YiLCBza2lwID0gNCkKeTIwMTggPC0gcmVhZF9jc3YoIndhcWktY292aWQxOS1haXJxdWFsaXR5ZGF0YS0yMDE4SDEuY3N2Iiwgc2tpcCA9IDQpCnkyMDE3IDwtIHJlYWRfY3N2KCJ3YXFpLWNvdmlkMTktYWlycXVhbGl0eWRhdGEtMjAxN0gxLmNzdiIsIHNraXAgPSA0KQpgYGAKCgpgYGB7cn0KaW5kaWEgPC0geTIwMjAgJT4lIGZpbHRlcihDb3VudHJ5ID09ICJJTiIpCmNpdGllcyA8LSBpbmRpYSAlPiUgZ3JvdXBfYnkoQ2l0eSkgJT4lIHN1bW1hcmlzZShuID0gbigpKQpgYGAKCmBgYHtyfQpkZWxoaV8yMDIwIDwtIHkyMDIwICU+JSBmaWx0ZXIoQ2l0eSA9PSAiTmV3IERlbGhpIiB8IENpdHkgPT0gIkRlbGhpIikKZGVsaGlfMjAxOXExIDwtIHkyMDE5cTEgJT4lIGZpbHRlcihDaXR5ID09ICJOZXcgRGVsaGkiIHwgQ2l0eSA9PSAiRGVsaGkiKQpkZWxoaV8yMDE5cTIgPC0geTIwMTlxMiAlPiUgZmlsdGVyKENpdHkgPT0gIk5ldyBEZWxoaSIgfCBDaXR5ID09ICJEZWxoaSIpCmRlbGhpXzIwMTggPC0geTIwMTggJT4lIGZpbHRlcihDaXR5ID09ICJOZXcgRGVsaGkiIHwgQ2l0eSA9PSAiRGVsaGkiKQpkZWxoaV8yMDE3IDwtIHkyMDE3ICU+JSBmaWx0ZXIoQ2l0eSA9PSAiTmV3IERlbGhpIiB8IENpdHkgPT0gIkRlbGhpIikKYGBgCgpgYGB7cn0KcmVtb3ZlKHkyMDIwLCB5MjAxOXExLCB5MjAxOXEyLCB5MjAxOCwgeTIwMTcpCmBgYAoKYGBge3J9CmRlbGhpIDwtIHJiaW5kKGRlbGhpXzIwMjAsIGRlbGhpXzIwMTlxMiwgZGVsaGlfMjAxOXExLCBkZWxoaV8yMDE4LCBkZWxoaV8yMDE3KQpgYGAKCgojIFBsb3R0aW5nIFBNIDEwIHllYXIgb24geWVhcgpgYGB7cn0KZGVsaGkkeWVhciA8LSBzdWJzdHIoZGVsaGkkRGF0ZSwgMSw0KQpkZWxoaSRkYXlfbW9udGggPC0gc3Vic3RyKGRlbGhpJERhdGUsIDYsMTApCmBgYAoKIyBQTTEwCmBgYHtyfQpkYXQgPC0gZGVsaGkgJT4lIGZpbHRlcihTcGVjaWUgPT0gInBtMTAiICYgRGF0ZSA+PSAiMjAxNy0wMS0wMSIpICU+JSBzZWxlY3QoeWVhciwgZGF5X21vbnRoLCBtZWRpYW4pICU+JSBwaXZvdF93aWRlcihpZF9jb2xzID0gImRheV9tb250aCIsIG5hbWVzX2Zyb20gPSAieWVhciIsIG5hbWVzX3ByZWZpeCA9ICJ5IiwgdmFsdWVzX2Zyb20gPSAibWVkaWFuIikgCmRhdCRkYXlfbW9udGggPC0gYXMuRGF0ZShkYXQkZGF5X21vbnRoLCAiJW0tJWQiKQpkYXQgPC0gZGF0ICU+JSBhcnJhbmdlKGRheV9tb250aCkKd3JpdGVfY3N2KGRhdCwgInBtMTAuY3N2IikKYGBgCgojIFBNMi41CmBgYHtyfQpkYXQgPC0gZGVsaGkgJT4lIGZpbHRlcihTcGVjaWUgPT0gInBtMjUiICYgRGF0ZSA+PSAiMjAxNy0wMS0wMSIgJiBDaXR5ID09ICJEZWxoaSIpICU+JSBzZWxlY3QoeWVhciwgZGF5X21vbnRoLCBtZWRpYW4pICU+JSBwaXZvdF93aWRlcihpZF9jb2xzID0gImRheV9tb250aCIsIG5hbWVzX2Zyb20gPSAieWVhciIsIG5hbWVzX3ByZWZpeCA9ICJ5IiwgdmFsdWVzX2Zyb20gPSAibWVkaWFuIikgCmRhdCRkYXlfbW9udGggPC0gYXMuRGF0ZShkYXQkZGF5X21vbnRoLCAiJW0tJWQiKQpkYXQgPC0gZGF0ICU+JSBzZWxlY3QoZGF5X21vbnRoLCB5MjAyMCwgeTIwMTksIHkyMDE4LCB5MjAxNykgJT4lIGFycmFuZ2UoZGF5X21vbnRoKQp3cml0ZV9jc3YoZGF0LCAicG0yNS5jc3YiKQpgYGAKCiMgQ08KYGBge3J9CmRhdCA8LSBkZWxoaSAlPiUgZmlsdGVyKFNwZWNpZSA9PSAiY28iICYgRGF0ZSA+PSAiMjAxNy0wMS0wMSIpICU+JSBzZWxlY3QoeWVhciwgZGF5X21vbnRoLCBtZWRpYW4pICU+JSBwaXZvdF93aWRlcihpZF9jb2xzID0gImRheV9tb250aCIsIG5hbWVzX2Zyb20gPSAieWVhciIsIG5hbWVzX3ByZWZpeCA9ICJ5IiwgdmFsdWVzX2Zyb20gPSAibWVkaWFuIikgCmRhdCRkYXlfbW9udGggPC0gYXMuRGF0ZShkYXQkZGF5X21vbnRoLCAiJW0tJWQiKQpkYXQgPC0gZGF0ICU+JSBzZWxlY3QoZGF5X21vbnRoLCB5MjAyMCwgeTIwMTksIHkyMDE4LCB5MjAxNykgJT4lIGFycmFuZ2UoZGF5X21vbnRoKQp3cml0ZV9jc3YoZGF0LCAiQ08uY3N2IikKYGBgCgojIE5PMgpgYGB7cn0KZGF0IDwtIGRlbGhpICU+JSBmaWx0ZXIoU3BlY2llID09ICJubzIiICYgRGF0ZSA+PSAiMjAxNy0wMS0wMSIpICU+JSBzZWxlY3QoeWVhciwgZGF5X21vbnRoLCBtZWRpYW4pICU+JSBwaXZvdF93aWRlcihpZF9jb2xzID0gImRheV9tb250aCIsIG5hbWVzX2Zyb20gPSAieWVhciIsIG5hbWVzX3ByZWZpeCA9ICJ5IiwgdmFsdWVzX2Zyb20gPSAibWVkaWFuIikgCmRhdCRkYXlfbW9udGggPC0gYXMuRGF0ZShkYXQkZGF5X21vbnRoLCAiJW0tJWQiKQpkYXQgPC0gZGF0ICU+JSBzZWxlY3QoZGF5X21vbnRoLCB5MjAyMCwgeTIwMTksIHkyMDE4LCB5MjAxNykgJT4lIGFycmFuZ2UoZGF5X21vbnRoKQp3cml0ZV9jc3YoZGF0LCAiTk8yLmNzdiIpCmBgYAoKCiMgU08yCmBgYHtyfQpkYXQgPC0gZGVsaGkgJT4lIGZpbHRlcihTcGVjaWUgPT0gInNvMiIgJiBEYXRlID49ICIyMDE3LTAxLTAxIikgJT4lIHNlbGVjdCh5ZWFyLCBkYXlfbW9udGgsIG1lZGlhbikgJT4lIHBpdm90X3dpZGVyKGlkX2NvbHMgPSAiZGF5X21vbnRoIiwgbmFtZXNfZnJvbSA9ICJ5ZWFyIiwgbmFtZXNfcHJlZml4ID0gInkiLCB2YWx1ZXNfZnJvbSA9ICJtZWRpYW4iKSAKZGF0JGRheV9tb250aCA8LSBhcy5EYXRlKGRhdCRkYXlfbW9udGgsICIlbS0lZCIpCmRhdCA8LSBkYXQgJT4lIHNlbGVjdChkYXlfbW9udGgsIHkyMDIwLCB5MjAxOSwgeTIwMTgsIHkyMDE3KSAlPiUgYXJyYW5nZShkYXlfbW9udGgpCndyaXRlX2NzdihkYXQsICJTTzIuY3N2IikKYGBgCgojIE8zCmBgYHtyfQpkYXQgPC0gZGVsaGkgJT4lIGZpbHRlcihTcGVjaWUgPT0gIm8zIiAmIERhdGUgPj0gIjIwMTctMDEtMDEiKSAlPiUgc2VsZWN0KHllYXIsIGRheV9tb250aCwgbWVkaWFuKSAlPiUgcGl2b3Rfd2lkZXIoaWRfY29scyA9ICJkYXlfbW9udGgiLCBuYW1lc19mcm9tID0gInllYXIiLCBuYW1lc19wcmVmaXggPSAieSIsIHZhbHVlc19mcm9tID0gIm1lZGlhbiIpIApkYXQkZGF5X21vbnRoIDwtIGFzLkRhdGUoZGF0JGRheV9tb250aCwgIiVtLSVkIikKZGF0IDwtIGRhdCAlPiUgc2VsZWN0KGRheV9tb250aCwgeTIwMjAsIHkyMDE5LCB5MjAxOCwgeTIwMTcpICU+JSBhcnJhbmdlKGRheV9tb250aCkKd3JpdGVfY3N2KGRhdCwgIk8zLmNzdiIpCmBgYAoK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKVGhpcyBpcyBhbiBbUiBNYXJrZG93bl0oaHR0cDovL3JtYXJrZG93bi5yc3R1ZGlvLmNvbSkgTm90ZWJvb2suIFdoZW4geW91IGV4ZWN1dGUgY29kZSB3aXRoaW4gdGhlIG5vdGVib29rLCB0aGUgcmVzdWx0cyBhcHBlYXIgYmVuZWF0aCB0aGUgY29kZS4gCgpUcnkgZXhlY3V0aW5nIHRoaXMgY2h1bmsgYnkgY2xpY2tpbmcgdGhlICpSdW4qIGJ1dHRvbiB3aXRoaW4gdGhlIGNodW5rIG9yIGJ5IHBsYWNpbmcgeW91ciBjdXJzb3IgaW5zaWRlIGl0IGFuZCBwcmVzc2luZyAqQ21kK1NoaWZ0K0VudGVyKi4gCgpgYGB7cn0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQpybShsaXN0ID0gbHMoKSkKbGlicmFyeShyZWFkeGwpCmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KGdncmVwZWwpCmxpYnJhcnkoZm9yZWNhc3QpCnNldHdkKCJ+L0RvY3VtZW50cy9HaXRIdWIvYWlycG9sbHV0aW9uIikKYGBgCgojIEltcG9ydGluZyBkYXRhCmBgYHtyfQp5MjAyMCA8LSByZWFkX2NzdigiaHR0cHM6Ly9hcWljbi5vcmcvZGF0YS1wbGF0Zm9ybS9jb3ZpZDE5L3JlcG9ydC8xNTA0NC04NDc0N2FhZi8yMDIwL3dhcWktY292aWQtMjAyMC5jc3YiLCBza2lwID0gNCkKeTIwMTlxMSA8LSByZWFkX2Nzdigid2FxaS1jb3ZpZDE5LWFpcnF1YWxpdHlkYXRhLTIwMTlRMS5jc3YiLCBza2lwID0gNCkKeTIwMTlxMiA8LSByZWFkX2Nzdigid2FxaS1jb3ZpZDE5LWFpcnF1YWxpdHlkYXRhLTIwMTlRMi5jc3YiLCBza2lwID0gNCkKeTIwMTggPC0gcmVhZF9jc3YoIndhcWktY292aWQxOS1haXJxdWFsaXR5ZGF0YS0yMDE4SDEuY3N2Iiwgc2tpcCA9IDQpCnkyMDE3IDwtIHJlYWRfY3N2KCJ3YXFpLWNvdmlkMTktYWlycXVhbGl0eWRhdGEtMjAxN0gxLmNzdiIsIHNraXAgPSA0KQpgYGAKCgpgYGB7cn0KaW5kaWEgPC0geTIwMjAgJT4lIGZpbHRlcihDb3VudHJ5ID09ICJJTiIpCmNpdGllcyA8LSBpbmRpYSAlPiUgZ3JvdXBfYnkoQ2l0eSkgJT4lIHN1bW1hcmlzZShuID0gbigpKQpgYGAKCmBgYHtyfQpkZWxoaV8yMDIwIDwtIHkyMDIwICU+JSBmaWx0ZXIoQ2l0eSA9PSAiTmV3IERlbGhpIiB8IENpdHkgPT0gIkRlbGhpIikKZGVsaGlfMjAxOXExIDwtIHkyMDE5cTEgJT4lIGZpbHRlcihDaXR5ID09ICJOZXcgRGVsaGkiIHwgQ2l0eSA9PSAiRGVsaGkiKQpkZWxoaV8yMDE5cTIgPC0geTIwMTlxMiAlPiUgZmlsdGVyKENpdHkgPT0gIk5ldyBEZWxoaSIgfCBDaXR5ID09ICJEZWxoaSIpCmRlbGhpXzIwMTggPC0geTIwMTggJT4lIGZpbHRlcihDaXR5ID09ICJOZXcgRGVsaGkiIHwgQ2l0eSA9PSAiRGVsaGkiKQpkZWxoaV8yMDE3IDwtIHkyMDE3ICU+JSBmaWx0ZXIoQ2l0eSA9PSAiTmV3IERlbGhpIiB8IENpdHkgPT0gIkRlbGhpIikKYGBgCgpgYGB7cn0KcmVtb3ZlKHkyMDIwLCB5MjAxOXExLCB5MjAxOXEyLCB5MjAxOCwgeTIwMTcpCmBgYAoKYGBge3J9CmRlbGhpIDwtIHJiaW5kKGRlbGhpXzIwMjAsIGRlbGhpXzIwMTlxMiwgZGVsaGlfMjAxOXExLCBkZWxoaV8yMDE4LCBkZWxoaV8yMDE3KQpgYGAKCgojIFBsb3R0aW5nIFBNIDEwIHllYXIgb24geWVhcgpgYGB7cn0KZGVsaGkkeWVhciA8LSBzdWJzdHIoZGVsaGkkRGF0ZSwgMSw0KQpkZWxoaSRkYXlfbW9udGggPC0gc3Vic3RyKGRlbGhpJERhdGUsIDYsMTApCmRlbGhpIDwtIGRlbGhpICU+JSBmaWx0ZXIoZGF5X21vbnRoICE9ICIxMi0zMSIgJiBkYXlfbW9udGggIT0gIjEyLTMwIikKYGBgCgojIFBNMTAKYGBge3J9CmRhdCA8LSBkZWxoaSAlPiUgZmlsdGVyKFNwZWNpZSA9PSAicG0xMCIgJiBEYXRlID49ICIyMDE3LTAxLTAxIikgJT4lIHNlbGVjdCh5ZWFyLCBkYXlfbW9udGgsIG1lZGlhbikgJT4lIHBpdm90X3dpZGVyKGlkX2NvbHMgPSAiZGF5X21vbnRoIiwgbmFtZXNfZnJvbSA9ICJ5ZWFyIiwgbmFtZXNfcHJlZml4ID0gInkiLCB2YWx1ZXNfZnJvbSA9ICJtZWRpYW4iKSAKZGF0JGRheV9tb250aCA8LSBhcy5EYXRlKGRhdCRkYXlfbW9udGgsICIlbS0lZCIpCmRhdCA8LSBkYXRbcmV2KG9yZGVyKGRhdCRkYXlfbW9udGgpKSxdCndyaXRlX2NzdihkYXQsICJEZWxoaS9wbTEwLmNzdiIpCmBgYAoKIyBQTTIuNQpgYGB7cn0KZGF0IDwtIGRlbGhpICU+JSBmaWx0ZXIoU3BlY2llID09ICJwbTI1IiAmIERhdGUgPj0gIjIwMTctMDEtMDEiICYgQ2l0eSA9PSAiRGVsaGkiKSAlPiUgc2VsZWN0KHllYXIsIGRheV9tb250aCwgbWVkaWFuKSAlPiUgcGl2b3Rfd2lkZXIoaWRfY29scyA9ICJkYXlfbW9udGgiLCBuYW1lc19mcm9tID0gInllYXIiLCBuYW1lc19wcmVmaXggPSAieSIsIHZhbHVlc19mcm9tID0gIm1lZGlhbiIpIApkYXQkZGF5X21vbnRoIDwtIGFzLkRhdGUoZGF0JGRheV9tb250aCwgIiVtLSVkIikKZGF0IDwtIGRhdFtyZXYob3JkZXIoZGF0JGRheV9tb250aCkpLF0Kd3JpdGVfY3N2KGRhdCwgIkRlbGhpL3BtMjUuY3N2IikKYGBgCgojIENPCmBgYHtyfQpkYXQgPC0gZGVsaGkgJT4lIGZpbHRlcihTcGVjaWUgPT0gImNvIiAmIERhdGUgPj0gIjIwMTctMDEtMDEiKSAlPiUgc2VsZWN0KHllYXIsIGRheV9tb250aCwgbWVkaWFuKSAlPiUgcGl2b3Rfd2lkZXIoaWRfY29scyA9ICJkYXlfbW9udGgiLCBuYW1lc19mcm9tID0gInllYXIiLCBuYW1lc19wcmVmaXggPSAieSIsIHZhbHVlc19mcm9tID0gIm1lZGlhbiIpIApkYXQkZGF5X21vbnRoIDwtIGFzLkRhdGUoZGF0JGRheV9tb250aCwgIiVtLSVkIikKZGF0IDwtIGRhdFtyZXYob3JkZXIoZGF0JGRheV9tb250aCkpLF0Kd3JpdGVfY3N2KGRhdCwgIkRlbGhpL0NPLmNzdiIpCmBgYAoKIyBOTzIKYGBge3J9CmRhdCA8LSBkZWxoaSAlPiUgZmlsdGVyKFNwZWNpZSA9PSAibm8yIiAmIERhdGUgPj0gIjIwMTctMDEtMDEiKSAlPiUgc2VsZWN0KHllYXIsIGRheV9tb250aCwgbWVkaWFuKSAlPiUgcGl2b3Rfd2lkZXIoaWRfY29scyA9ICJkYXlfbW9udGgiLCBuYW1lc19mcm9tID0gInllYXIiLCBuYW1lc19wcmVmaXggPSAieSIsIHZhbHVlc19mcm9tID0gIm1lZGlhbiIpIApkYXQkZGF5X21vbnRoIDwtIGFzLkRhdGUoZGF0JGRheV9tb250aCwgIiVtLSVkIikKZGF0IDwtIGRhdFtyZXYob3JkZXIoZGF0JGRheV9tb250aCkpLF0Kd3JpdGVfY3N2KGRhdCwgIkRlbGhpL05PMi5jc3YiKQpgYGAKCgojIFNPMgpgYGB7cn0KZGF0IDwtIGRlbGhpICU+JSBmaWx0ZXIoU3BlY2llID09ICJzbzIiICYgRGF0ZSA+PSAiMjAxNy0wMS0wMSIpICU+JSBzZWxlY3QoeWVhciwgZGF5X21vbnRoLCBtZWRpYW4pICU+JSBwaXZvdF93aWRlcihpZF9jb2xzID0gImRheV9tb250aCIsIG5hbWVzX2Zyb20gPSAieWVhciIsIG5hbWVzX3ByZWZpeCA9ICJ5IiwgdmFsdWVzX2Zyb20gPSAibWVkaWFuIikgCmRhdCRkYXlfbW9udGggPC0gYXMuRGF0ZShkYXQkZGF5X21vbnRoLCAiJW0tJWQiKQpkYXQgPC0gZGF0W3JldihvcmRlcihkYXQkZGF5X21vbnRoKSksXQp3cml0ZV9jc3YoZGF0LCAiRGVsaGkvU08yLmNzdiIpCmBgYAoKIyBPMwpgYGB7cn0KZGF0IDwtIGRlbGhpICU+JSBmaWx0ZXIoU3BlY2llID09ICJvMyIgJiBEYXRlID49ICIyMDE3LTAxLTAxIikgJT4lIHNlbGVjdCh5ZWFyLCBkYXlfbW9udGgsIG1lZGlhbikgJT4lIHBpdm90X3dpZGVyKGlkX2NvbHMgPSAiZGF5X21vbnRoIiwgbmFtZXNfZnJvbSA9ICJ5ZWFyIiwgbmFtZXNfcHJlZml4ID0gInkiLCB2YWx1ZXNfZnJvbSA9ICJtZWRpYW4iKSAKZGF0JGRheV9tb250aCA8LSBhcy5EYXRlKGRhdCRkYXlfbW9udGgsICIlbS0lZCIpCmRhdCA8LSBkYXRbcmV2KG9yZGVyKGRhdCRkYXlfbW9udGgpKSxdCndyaXRlX2NzdihkYXQsICJEZWxoaS9PMy5jc3YiKQpgYGAKCg==</div>
 
 
 
