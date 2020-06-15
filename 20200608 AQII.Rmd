@@ -62,6 +62,11 @@ dat <- delhi %>% filter(Specie == "pm10" & Date >= "2017-01-01") %>% select(year
 dat$day_month <- as.Date(dat$day_month, "%m-%d")
 dat <- dat[rev(order(dat$day_month)),]
 write_csv(dat, "Delhi/pm10.csv")
+
+dat <- delhi %>% filter(Specie == "pm10" & Date >= "2017-01-01") %>% select(year, day_month, max) %>% pivot_wider(id_cols = "day_month", names_from = "year", names_prefix = "max", values_from = "max") 
+dat$day_month <- as.Date(dat$day_month, "%m-%d")
+dat <- dat[rev(order(dat$day_month)),]
+write_csv(dat, "Delhi/pm10_max.csv")
 ```
 
 # PM2.5
