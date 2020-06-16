@@ -1753,14 +1753,40 @@ summary {
 <p>Try executing this chunk by clicking the <em>Run</em> button within the chunk or by placing your cursor inside it and pressing <em>Cmd+Shift+Enter</em>.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxua25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKVxucm0obGlzdCA9IGxzKCkpXG5saWJyYXJ5KHJlYWR4bClcbmxpYnJhcnkodGlkeXZlcnNlKVxubGlicmFyeShnZ3JlcGVsKVxubGlicmFyeShmb3JlY2FzdClcbnNldHdkKFwifi9Eb2N1bWVudHMvR2l0SHViL2FpcnBvbGx1dGlvblwiKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxua25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKVxucm0obGlzdCA9IGxzKCkpXG5saWJyYXJ5KHJlYWR4bClcbmxpYnJhcnkodGlkeXZlcnNlKVxuYGBgIn0= -->
 <pre class="r"><code>knitr::opts_chunk$set(echo = TRUE)
 rm(list = ls())
 library(readxl)
-library(tidyverse)
-library(ggrepel)
-library(forecast)
-setwd(&quot;~/Documents/GitHub/airpollution&quot;)</code></pre>
+library(tidyverse)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUmVnaXN0ZXJlZCBTMyBtZXRob2Qgb3ZlcndyaXR0ZW4gYnkgJ2RwbHlyJzpcbiAgbWV0aG9kICAgICAgICAgICBmcm9tXG4gIHByaW50LnJvd3dpc2VfZGYgICAgIFxuUmVnaXN0ZXJlZCBTMyBtZXRob2RzIG92ZXJ3cml0dGVuIGJ5ICdkYnBseXInOlxuICBtZXRob2QgICAgICAgICBmcm9tXG4gIHByaW50LnRibF9sYXp5ICAgICBcbiAgcHJpbnQudGJsX3NxbCAgICAgIFxuXHUwMDFiWzMwbeKUgOKUgCBcdTAwMWJbMW1BdHRhY2hpbmcgcGFja2FnZXNcdTAwMWJbMjJtIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCB0aWR5dmVyc2UgMS4zLjAg4pSA4pSAXHUwMDFiWzM5bVxuXHUwMDFiWzMwbVx1MDAxYlszMm3inJNcdTAwMWJbMzBtIFx1MDAxYlszNG1nZ3Bsb3QyXHUwMDFiWzMwbSAzLjMuMCAgICAgXHUwMDFiWzMybeKck1x1MDAxYlszMG0gXHUwMDFiWzM0bXB1cnJyICBcdTAwMWJbMzBtIDAuMy4zXG5cdTAwMWJbMzJt4pyTXHUwMDFiWzMwbSBcdTAwMWJbMzRtdGliYmxlIFx1MDAxYlszMG0gMy4wLjAgICAgIFx1MDAxYlszMm3inJNcdTAwMWJbMzBtIFx1MDAxYlszNG1kcGx5ciAgXHUwMDFiWzMwbSAwLjguNVxuXHUwMDFiWzMybeKck1x1MDAxYlszMG0gXHUwMDFiWzM0bXRpZHlyICBcdTAwMWJbMzBtIDEuMC4yICAgICBcdTAwMWJbMzJt4pyTXHUwMDFiWzMwbSBcdTAwMWJbMzRtc3RyaW5nclx1MDAxYlszMG0gMS40LjBcblx1MDAxYlszMm3inJNcdTAwMWJbMzBtIFx1MDAxYlszNG1yZWFkciAgXHUwMDFiWzMwbSAxLjMuMSAgICAgXHUwMDFiWzMybeKck1x1MDAxYlszMG0gXHUwMDFiWzM0bWZvcmNhdHNcdTAwMWJbMzBtIDAuNS4wXHUwMDFiWzM5bVxuXHUwMDFiWzMwbeKUgOKUgCBcdTAwMWJbMW1Db25mbGljdHNcdTAwMWJbMjJtIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgCB0aWR5dmVyc2VfY29uZmxpY3RzKCkg4pSA4pSAXG5cdTAwMWJbMzFteFx1MDAxYlszMG0gXHUwMDFiWzM0bWRwbHlyXHUwMDFiWzMwbTo6XHUwMDFiWzMybWZpbHRlcigpXHUwMDFiWzMwbSBtYXNrcyBcdTAwMWJbMzRtc3RhdHNcdTAwMWJbMzBtOjpmaWx0ZXIoKVxuXHUwMDFiWzMxbXhcdTAwMWJbMzBtIFx1MDAxYlszNG1kcGx5clx1MDAxYlszMG06Olx1MDAxYlszMm1sYWcoKVx1MDAxYlszMG0gICAgbWFza3MgXHUwMDFiWzM0bXN0YXRzXHUwMDFiWzMwbTo6bGFnKClcdTAwMWJbMzltXG4ifQ== -->
+<pre><code>Registered S3 method overwritten by 'dplyr':
+  method           from
+  print.rowwise_df     
+Registered S3 methods overwritten by 'dbplyr':
+  method         from
+  print.tbl_lazy     
+  print.tbl_sql      
+[30m── [1mAttaching packages[22m ────────────────────────────────────────────────── tidyverse 1.3.0 ──[39m
+[30m[32m✓[30m [34mggplot2[30m 3.3.0     [32m✓[30m [34mpurrr  [30m 0.3.3
+[32m✓[30m [34mtibble [30m 3.0.0     [32m✓[30m [34mdplyr  [30m 0.8.5
+[32m✓[30m [34mtidyr  [30m 1.0.2     [32m✓[30m [34mstringr[30m 1.4.0
+[32m✓[30m [34mreadr  [30m 1.3.1     [32m✓[30m [34mforcats[30m 0.5.0[39m
+[30m── [1mConflicts[22m ───────────────────────────────────────────────────── tidyverse_conflicts() ──
+[31mx[30m [34mdplyr[30m::[32mfilter()[30m masks [34mstats[30m::filter()
+[31mx[30m [34mdplyr[30m::[32mlag()[30m    masks [34mstats[30m::lag()[39m</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShnZ3JlcGVsKVxubGlicmFyeShmb3JlY2FzdClcbmBgYCJ9 -->
+<pre class="r"><code>library(ggrepel)
+library(forecast)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUmVnaXN0ZXJlZCBTMyBtZXRob2Qgb3ZlcndyaXR0ZW4gYnkgJ3F1YW50bW9kJzpcbiAgbWV0aG9kICAgICAgICAgICAgZnJvbVxuICBhcy56b28uZGF0YS5mcmFtZSB6b28gXG4ifQ== -->
+<pre><code>Registered S3 method overwritten by 'quantmod':
+  method            from
+  as.zoo.data.frame zoo </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0d2QoXCJ+L0RvY3VtZW50cy9HaXRIdWIvYWlycG9sbHV0aW9uXCIpXG5gYGAifQ== -->
+<pre class="r"><code>setwd(&quot;~/Documents/GitHub/airpollution&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1905,18 +1931,17 @@ delhi &lt;- delhi %&gt;% filter(day_month != &quot;12-31&quot; &amp; day_month !
 <h1>PM10</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0IDwtIGRlbGhpICU+JSBmaWx0ZXIoU3BlY2llID09IFwicG0xMFwiICYgRGF0ZSA+PSBcIjIwMTctMDEtMDFcIikgJT4lIHNlbGVjdCh5ZWFyLCBkYXlfbW9udGgsIG1lZGlhbikgJT4lIHBpdm90X3dpZGVyKGlkX2NvbHMgPSBcImRheV9tb250aFwiLCBuYW1lc19mcm9tID0gXCJ5ZWFyXCIsIG5hbWVzX3ByZWZpeCA9IFwieVwiLCB2YWx1ZXNfZnJvbSA9IFwibWVkaWFuXCIpIFxuZGF0JGRheV9tb250aCA8LSBhcy5EYXRlKGRhdCRkYXlfbW9udGgsIFwiJW0tJWRcIilcbmRhdCA8LSBkYXRbcmV2KG9yZGVyKGRhdCRkYXlfbW9udGgpKSxdXG53cml0ZV9jc3YoZGF0LCBcIkRlbGhpL3BtMTAuY3N2XCIpXG5cbmRhdCA8LSBkZWxoaSAlPiUgZmlsdGVyKFNwZWNpZSA9PSBcInBtMTBcIiAmIERhdGUgPj0gXCIyMDE3LTAxLTAxXCIpICU+JSBzZWxlY3QoeWVhciwgZGF5X21vbnRoLCBtYXhpbXVtKSAlPiUgcGl2b3Rfd2lkZXIoaWRfY29scyA9IFwiZGF5X21vbnRoXCIsIG5hbWVzX2Zyb20gPSBcInllYXJcIiwgbmFtZXNfcHJlZml4ID0gXCJ5XCIsIHZhbHVlc19mcm9tID0gXCJtYXhpbXVtXCIpIFxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0IDwtIGRlbGhpICU+JSBmaWx0ZXIoU3BlY2llID09IFwicG0xMFwiICYgRGF0ZSA+PSBcIjIwMTctMDEtMDFcIikgJT4lIHNlbGVjdCh5ZWFyLCBkYXlfbW9udGgsIG1lZGlhbikgJT4lIHBpdm90X3dpZGVyKGlkX2NvbHMgPSBcImRheV9tb250aFwiLCBuYW1lc19mcm9tID0gXCJ5ZWFyXCIsIG5hbWVzX3ByZWZpeCA9IFwieVwiLCB2YWx1ZXNfZnJvbSA9IFwibWVkaWFuXCIpIFxuZGF0JGRheV9tb250aCA8LSBhcy5EYXRlKGRhdCRkYXlfbW9udGgsIFwiJW0tJWRcIilcbmRhdCA8LSBkYXRbcmV2KG9yZGVyKGRhdCRkYXlfbW9udGgpKSxdXG53cml0ZV9jc3YoZGF0LCBcIkRlbGhpL3BtMTAuY3N2XCIpXG5cbmRhdCA8LSBkZWxoaSAlPiUgZmlsdGVyKFNwZWNpZSA9PSBcInBtMTBcIiAmIERhdGUgPj0gXCIyMDE3LTAxLTAxXCIpICU+JSBzZWxlY3QoeWVhciwgZGF5X21vbnRoLCBtYXgpICU+JSBwaXZvdF93aWRlcihpZF9jb2xzID0gXCJkYXlfbW9udGhcIiwgbmFtZXNfZnJvbSA9IFwieWVhclwiLCBuYW1lc19wcmVmaXggPSBcIm1heFwiLCB2YWx1ZXNfZnJvbSA9IFwibWF4XCIpIFxuZGF0JGRheV9tb250aCA8LSBhcy5EYXRlKGRhdCRkYXlfbW9udGgsIFwiJW0tJWRcIilcbmRhdCA8LSBkYXRbcmV2KG9yZGVyKGRhdCRkYXlfbW9udGgpKSxdXG53cml0ZV9jc3YoZGF0LCBcIkRlbGhpL3BtMTBfbWF4LmNzdlwiKVxuYGBgIn0= -->
 <pre class="r"><code>dat &lt;- delhi %&gt;% filter(Specie == &quot;pm10&quot; &amp; Date &gt;= &quot;2017-01-01&quot;) %&gt;% select(year, day_month, median) %&gt;% pivot_wider(id_cols = &quot;day_month&quot;, names_from = &quot;year&quot;, names_prefix = &quot;y&quot;, values_from = &quot;median&quot;) 
 dat$day_month &lt;- as.Date(dat$day_month, &quot;%m-%d&quot;)
 dat &lt;- dat[rev(order(dat$day_month)),]
 write_csv(dat, &quot;Delhi/pm10.csv&quot;)
 
-dat &lt;- delhi %&gt;% filter(Specie == &quot;pm10&quot; &amp; Date &gt;= &quot;2017-01-01&quot;) %&gt;% select(year, day_month, maximum) %&gt;% pivot_wider(id_cols = &quot;day_month&quot;, names_from = &quot;year&quot;, names_prefix = &quot;y&quot;, values_from = &quot;maximum&quot;) </code></pre>
+dat &lt;- delhi %&gt;% filter(Specie == &quot;pm10&quot; &amp; Date &gt;= &quot;2017-01-01&quot;) %&gt;% select(year, day_month, max) %&gt;% pivot_wider(id_cols = &quot;day_month&quot;, names_from = &quot;year&quot;, names_prefix = &quot;max&quot;, values_from = &quot;max&quot;) 
+dat$day_month &lt;- as.Date(dat$day_month, &quot;%m-%d&quot;)
+dat &lt;- dat[rev(order(dat$day_month)),]
+write_csv(dat, &quot;Delhi/pm10_max.csv&quot;)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3I6IENhbid0IHN1YnNldCBjb2x1bW5zIHRoYXQgZG9uJ3QgZXhpc3QuXG5cdTAwMWJbMzFteFx1MDAxYlszOW0gVGhlIGNvbHVtbiBgbWF4aW11bWAgZG9lc24ndCBleGlzdC5cbiJ9 -->
-<pre><code>Error: Can't subset columns that don't exist.
-[31mx[39m The column `maximum` doesn't exist.</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
